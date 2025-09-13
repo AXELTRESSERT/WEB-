@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Up Game - Mobile Legends by clone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0e17;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            opacity: 0.3;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #2a3b5a;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 15px;
+            color: #aab8d0;
+        }
+        
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #ff2e43;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            background: rgba(19, 30, 53, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .nav-item.active {
+            background: #1e3a8a;
+        }
+        
+        .nav-item:hover {
+            background: #2d4ba0;
+        }
+        
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .content {
+            background: rgba(19, 30, 53, 0.8);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a3b5a;
+            color: #ffcc00;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .product-item {
+            background: #152344;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+        
+        .product-item:hover {
+            transform: translateY(-5px);
+            background: #1c2f5a;
+        }
+        
+        .product-item.selected {
+            border: 2px solid #ffcc00;
+            background: #1c2f5a;
+        }
+        
+        .diamond-icon {
+            font-size: 30px;
+            color: #4fc3f7;
+            margin-bottom: 10px;
+        }
+        
+        .product-name {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group {
+            flex: 1;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aab8d0;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #2a3b5a;
+            background: #0f172a;
+            color: white;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .quantity-input {
+            width: 80px;
+            height: 40px;
+            margin: 0 10px;
+            text-align: center;
+            background: #0f172a;
+            border: 1px solid #2a3b5a;
+            border-radius: 6px;
+            color: white;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-btn {
+            padding: 12px;
+            background: #152344;
+            border: 1px solid #2a3b5a;
+            border-radius: 6px;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .payment-btn:hover {
+            background: #1c2f5a;
+        }
+        
+        .promo-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .promo-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #2a3b5a;
+            background: #0f172a;
+            color: white;
+        }
+        
+        .promo-btn {
+            padding: 0 20px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ffcc00;
+            color: #0a0e17;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background: #ffdd44;
+        }
+        
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://files.catbox.moe/6exn2a.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        
+        .login-box {
+            background: rgba(19, 30, 53, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #2a3b5a;
+            background: #0f172a;
+            color: white;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffcc00;
+            color: #0a0e17;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .login-btn:hover {
+            background: #ffdd44;
+        }
+        
+        .developer-note {
+            text-align: center;
+            margin-top: 15px;
+            color: #aab8d0;
+            font-size: 12px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .alert {
+            padding: 15px;
+            background: #ff4757;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .success {
+            background: #2ed573;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <video id="video-background" autoplay muted loop>
+        <source src="https://files.catbox.moe/74i40s.mp4" type="video/mp4">
+    </video>
+    
+    <!-- Login Section -->
+    <div id="login-section" class="login-container">
+        <div class="login-box">
+            <h2 class="login-title">isi aja pw usn acak tetap bisa masuk asal jgn kosong</h2>
+            <div class="login-form">
+                <input type="text" id="username" placeholder="Username">
+                <input type="password" id="password" placeholder="Password">
+                <button class="login-btn" onclick="login()">Login</button>
+            </div>
+            <p class="developer-note">developer: clone</p>
+        </div>
+    </div>
+    
+    <!-- Main Content (Hidden until login) -->
+    <div id="main-section" class="hidden">
+        <div class="container">
+            <header>
+                <div class="logo">
+                    <i class="fas fa-gem"></i>
+                    Top Up Game by clone
+                </div>
+                <div class="user-info">
+                    <span id="user-display">Selamat Datang, Player!</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </header>
+            
+            <div class="main-content">
+                <div class="sidebar">
+                    <div class="nav-item active" onclick="showSection('transaction')">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transaksi</span>
+                    </div>
+                    <div class="nav-item" onclick="showSection('info')">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Keterangan</span>
+                    </div>
+                </div>
+                
+                <div class="content">
+                    <!-- Transaction Section -->
+                    <div id="transaction-section">
+                        <h2 class="section-title">Top Up Mobile Legends</h2>
+                        
+                        <div class="product-grid">
+                            <!-- Special Items -->
+                            <div class="product-item" data-price="27183" onclick="selectProduct(this)">
+                                <div class="diamond-icon"><i class="fas fa-crown"></i></div>
+                                <div class="product-name">Weekly Diamond Pass</div>
+                                <div class="product-price">Rp 27.183</div>
+                            </div>
+                            <div class="product-item" data-price="148567" onclick="selectProduct(this)">
+                                <div class="diamond-icon"><i class="fas fa-crown"></i></div>
+                                <div class="product-name">Twilight Pass</div>
+                                <div class="product-price">Rp 148.567</div>
+                            </div>
+                            
+                            <!-- Diamond Items -->
+                            <div class="product-item" data-price="1501" onclick="selectProduct(this)">
+                                <div class="diamond-icon"><i class="fas fa-gem"></i></div>
+                                <div class="product-name">5 💎</div>
+                                <div class="product-price">Rp 1.501</div>
+                            </div>
+                            <div class="product-item" data-price="3059" onclick="selectProduct(this)">
+                                <div class="diamond-icon"><i class="fas fa-gem"></i></div>
+                                <div class="product-name">10 💎</div>
+                                <div class="product-price">Rp 3.059</div>
+                            </div>
+                            <div class="product-item" data-price="3519" onclick="selectProduct(this)">
+                                <div class="diamond-icon"><i class="fas fa-gem"></i></div>
+                                <div class="product-name">12 💎</div>
+                                <div class="product-price">Rp 3.519</div>
+                            </div>
+                            <div class="product-item" data-price="3819" onclick="selectProduct(this)">
+                                <div class="diamond-icon"><i class="fas fa-gem"></i></div>
+                                <div class="product-name">14 💎</div>
+                                <div class="product-price">Rp 3.819</div>
+                            </div>
+                            <div class="product-item" data-price="4527" onclick="selectProduct(this)">
+                                <div class="diamond-icon"><i class="fas fa-gem"></i></div>
+                                <div class="product-name">15 💎</div>
+                                <div class="product-price">Rp 4.527</div>
+                            </div>
+                            <!-- More diamond items would be added here -->
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3 class="section-title">Masukan Data Akun</h3>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="game-id">ID</label>
+                                    <input type="text" id="game-id" placeholder="Masukan ID">
+                                </div>
+                                <div class="input-group">
+                                    <label for="server">Server</label>
+                                    <input type="text" id="server" placeholder="Masukan Server">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3 class="section-title">Masukan Jumlah Pembelian</h3>
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                                <input type="number" id="quantity" class="quantity-input" value="1" min="1">
+                                <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3 class="section-title">Pilih Pembayaran</h3>
+                            <div class="payment-methods">
+                                <button class="payment-btn" onclick="selectPayment('DANA')">
+                                    DANA: 081227274189
+                                </button>
+                                <button class="payment-btn" onclick="selectPayment('OVO')">
+                                    OVO: beku
+                                </button>
+                                <button class="payment-btn" onclick="selectPayment('QRIS')">
+                                    QRIS: chat kepada admin
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3 class="section-title">Kode Promo</h3>
+                            <div class="promo-section">
+                                <input type="text" id="promo-code" class="promo-input" placeholder="Masukan code promo">
+                                <button class="promo-btn" onclick="applyPromo()">Gunakan</button>
+                            </div>
+                            <button class="promo-btn" style="width: 100%; margin-top: 10px;" onclick="showPromoList()">
+                                Pakai Code Promo yang Tersedia
+                            </button>
+                        </div>
+                        
+                        <button class="checkout-btn" onclick="processOrder()">
+                            Pesan Sekarang
+                        </button>
+                    </div>
+                    
+                    <!-- Info Section (Hidden by default) -->
+                    <div id="info-section" class="hidden">
+                        <h2 class="section-title">Keterangan</h2>
+                        <p>Ini adalah website top up Mobile Legends. Silakan pilih nominal diamond yang ingin dibeli, masukkan data akun, pilih metode pembayaran, dan gunakan kode promo jika ada.</p>
+                        <p>Untuk informasi lebih lanjut, hubungi admin melalui WhatsApp di 6281227274189.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+       
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('❌ Harap isi data akun terlebih dahulu');
+                return;
+            }
+            
+            
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('main-section').classList.remove('hidden');
+            document.getElementById('user-display').textContent = `Selamat Datang, ${username}!`;
+        }
+        
+        
+        function logout() {
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('main-section').classList.add('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+        
+        
+        function showSection(section) {
+            if (section === 'transaction') {
+                document.getElementById('transaction-section').classList.remove('hidden');
+                document.getElementById('info-section').classList.add('hidden');
+                document.querySelectorAll('.nav-item')[0].classList.add('active');
+                document.querySelectorAll('.nav-item')[1].classList.remove('active');
+            } else if (section === 'info') {
+                document.getElementById('transaction-section').classList.add('hidden');
+                document.getElementById('info-section').classList.remove('hidden');
+                document.querySelectorAll('.nav-item')[0].classList.remove('active');
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
+            }
+        }
+        
+        
+        let selectedProduct = null;
+        
+        function selectProduct(element) {
+            
+            document.querySelectorAll('.product-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+           
+            element.classList.add('selected');
+            selectedProduct = element;
+        }
+        
+        
+        function changeQuantity(change) {
+            const quantityInput = document.getElementById('quantity');
+            let quantity = parseInt(quantityInput.value) || 1;
+            quantity += change;
+            
+            if (quantity < 1) quantity = 1;
+            
+            quantityInput.value = quantity;
+        }
+        
+        
+        function selectPayment(method) {
+            alert(`Metode pembayaran ${method} dipilih`);
+        }
+        
+        
+        function applyPromo() {
+            const promoCode = document.getElementById('promo-code').value;
+            const validPromoCodes = ['cloneganteng1', 'clonepromo01'];
+            
+            if (!validPromoCodes.includes(promoCode)) {
+                alert('Kode promo tidak tersedia');
+                return;
+            }
+            
+            alert(`Kode promo ${promoCode} berhasil digunakan! Anda mendapatkan diskon Rp 10.000`);
+        }
+        
+        
+        function showPromoList() {
+            alert('Kode promo yang tersedia:\n1. cloneganteng1\n2. clonepromo01');
+        }
+        
+        
+        function processOrder() {
+            const gameId = document.getElementById('game-id').value;
+            const server = document.getElementById('server').value;
+            
+            if (!gameId || !server) {
+                alert('❌ Harap isi data akun terlebih dahulu');
+                return;
+            }
+            
+            if (!selectedProduct) {
+                alert('❌ Harap pilih produk terlebih dahulu');
+                return;
+            }
+            
+            const quantity = document.getElementById('quantity').value;
+            const promoCode = document.getElementById('promo-code').value;
+            
+            
+            const message = `Halo, saya ingin top up Mobile Legends dengan detail berikut:%0AID: ${gameId}%0AServer: ${server}%0aProduk: ${selectedProduct.querySelector('.product-name').textContent}%0AJumlah: ${quantity}%0AKode Promo: ${promoCode || 'Tidak ada'}`;
+            window.open(`https://wa.me/6281227274189?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+</html>
